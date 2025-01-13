@@ -1,8 +1,9 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import url from '@/app/utils/utils'
 
-const secretKey = "secret";
+const secretKey = "secret"; //change
 const key = new TextEncoder().encode(secretKey);
 
 export async function encrypt(payload: any) {
@@ -22,7 +23,7 @@ export async function decrypt(input: string): Promise<any> {
 
 export async function login(formData: FormData) {
   // Verify credentials && get the user
-  const res = await fetch("http://localhost:3005/login/", {
+  const res = await fetch(`${url}/login/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -33,7 +34,7 @@ export async function login(formData: FormData) {
     const body = await res.json()
     const token = body.token
     const expires = new Date(Date.now() + 60 * 60 * 1000)
-    const session = await encrypt({token, expires });
+    const session = await encrypt({ token, expires });
     (await
       // Save the session in a cookie
       cookies()).set("session", session, { expires, httpOnly: true });
@@ -62,7 +63,7 @@ export async function updateSession(request: NextRequest) {
 
   // Refresh the session so it doesn't expire
   const parsed = await decrypt(session);
-  parsed.expires = new Date(Date.now() + 10 * 1000);
+  parsed.expires = new Date(Date.now() + 60 * 60 * 1000);
   const res = NextResponse.next();
   res.cookies.set({
     name: "session",
@@ -71,4 +72,15 @@ export async function updateSession(request: NextRequest) {
     expires: parsed.expires,
   });
   return res;
+}
+
+export async function signup(formData:FormData) {
+  const res = await fetch(`${url}/signup`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ username: formData.get("username"), email: formData.get("email"), password: formData.get("password")})
+  })
+  return res.json()
 }

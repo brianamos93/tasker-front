@@ -1,15 +1,20 @@
 import type { NextRequest } from 'next/server'
+import { updateSession } from './utils/loginlib'
+
+const protectedRoutes = ['/task/create', '/task/edit/']
+const publicRoutes = ['']
  
-export function middleware(request: NextRequest) {
-  const currentUser = request.cookies.get('currentUser')?.value
+export async function middleware(request: NextRequest) {
+  await updateSession(request)
+  //const currentUser = request.cookies.get('session')?.value
  
-  if (currentUser && !request.nextUrl.pathname.startsWith('/dashboard')) {
-    return Response.redirect(new URL('/dashboard', request.url))
-  }
+  //if (currentUser && !request.nextUrl.pathname.startsWith('/dashboard')) {
+    //return Response.redirect(new URL('/dashboard', request.url))
+  //}
  
-  if (!currentUser && !request.nextUrl.pathname.startsWith('/login')) {
-    return Response.redirect(new URL('/login', request.url))
-  }
+  //if (!currentUser && !request.nextUrl.pathname.startsWith('/login')) {
+    //return Response.redirect(new URL('/login', request.url))
+  //}
 }
  
 export const config = {

@@ -1,29 +1,11 @@
-"use client"
 import { Task } from "../utils/def"
-import { getTasks, setToken } from "../utils/apiconnections"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { getSession } from "../utils/loginlib"
+import { getTasks } from "../utils/apiconnections"
 
-export default function Tasks() {
-
-	const [tasks, setTasks] = useState([])
-	const [user, setUser] = useState<null | string>(null)
-
-	useEffect(() => {
-		getTasks().then(tasks => {
-			setTasks(tasks)
-		})
-	}, [])
-
-	useEffect(() => {
-		const loggedUserJSON = window.localStorage.getItem('loggedTaskappuser')
-		if (loggedUserJSON) {
-			const user = JSON.parse(loggedUserJSON)
-			setUser(user)
-			setToken(user.token)
-		}
-	}, [])
-
+export default async function Tasks() {
+	const session = await getSession()
+	const tasks = await getTasks()
 	return (
 		<div>
 			<h1>Tasks</h1>

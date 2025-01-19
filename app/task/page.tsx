@@ -1,10 +1,8 @@
 import { Task } from "../utils/def"
 import Link from "next/link"
-import { getSession } from "../utils/loginlib"
 import { getTasks } from "../utils/apiconnections"
 
 export default async function Tasks() {
-	const session = await getSession()
 	const tasks = await getTasks()
 	return (
 		<div>
@@ -18,7 +16,7 @@ export default async function Tasks() {
 						<Link href={`/task/${task.id}`}>
 						{task.task}
 						</Link>
-						<Link href={'/task/edit/'}>
+						<Link href={`/task/edit/${task.id}`}>
 						Edit Task</Link>
 					</li>
 				))}

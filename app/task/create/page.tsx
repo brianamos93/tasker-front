@@ -1,21 +1,14 @@
 import Form from 'next/form'
-import { createTask, setToken } from "@/app/utils/apiconnections";
+import { createTask } from "@/app/utils/apiconnections";
 import { redirect } from "next/navigation";
-import { useEffect, useState } from "react"
+import { getSession } from '@/app/utils/loginlib';
 
-export default function CreateTask() {
-	const [user, setUser] = useState<null | string>(null)
+export default async function CreateTask() {
 
-	useEffect(() => {
-		const loggedUserJSON = window.localStorage.getItem('loggedTaskappUser')
-			if (loggedUserJSON) {
-				const user = JSON.parse(loggedUserJSON)
-				setUser(user)
-				setToken(user.token)
-			}
-	}, [])
+	const session = await getSession()
 
 	async function submitTask(formData: FormData) {
+		'use server'
 		const newtask = formData.get("task")
 		await createTask(newtask)
 		redirect('/tasks')

@@ -1,25 +1,24 @@
-import { getTask, setToken } from "@/app/utils/apiconnections";
-import { useEffect, useState } from "react";
+import TaskForm from "@/app/components/TaskForm";
+import { getTask } from "@/app/utils/apiconnections";
 
-export default function EditTask({params}: {params: Promise<{ id: string }>
-}) {
-	const [user, setUser] = useState<null | string>(null)
+interface TaskEditProps {
+	params: {
+		id: string;
+	};
+}
 
-	useEffect(() => {
-		const loggedUserJSON = window.localStorage.getItem('loggedTaskappUser')
-			if (loggedUserJSON) {
-				const user = JSON.parse(loggedUserJSON)
-				setUser(user)
-				setToken(user.token)
-			}
-	}, [])
+export default async function TaskEdit({ params }: TaskEditProps) {
+	const { id } = await params
+	const task = await getTask(id)
+	console.log(task[0].task)
 
-	//const task = await getTask((await params).id)
-	useEffect(() => {
-		if(id) {
-			const fetchTask = async () => {
-				const data = await getTask((await params).id)
-			}
-		}
-	})
+	const updateAction = "test"
+
+	return (
+		<main>
+			<div>
+				<TaskForm formAction={updateAction} initialData={{task: task[0]?.task ?? ''}} />
+			</div>
+		</main>
+	)
 }

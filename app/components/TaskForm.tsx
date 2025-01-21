@@ -3,13 +3,6 @@
 import Link from "next/link"
 import { useActionState } from "react"
 
-interface FormErrors {
-    task?: string[],
-}
-
-interface FormState {
-    errors: FormErrors,
-}
 
 interface TaskFormProps {
 	formAction: any,
@@ -19,9 +12,7 @@ interface TaskFormProps {
 }
 
 export default function TaskForm({ formAction, initialData }: TaskFormProps) {
-	const [ formState, action ] = useActionState<FormState>(formAction, {
-		errors: {},
-	})
+	const [ formState, action, pending ] = useActionState(formAction, initialData)
 
 
 return <>

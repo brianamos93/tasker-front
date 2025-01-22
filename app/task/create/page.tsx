@@ -10,8 +10,8 @@ export default async function CreateTask() {
 	async function submitTask(formData: FormData) {
 		'use server'
 		const newtask = formData.get("task")
-		await createTask(newtask)
-		redirect('/tasks')
+		await createTask(newtask, session.token)
+		redirect('/task')
 	}
 	
 	return (

@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   const isProtectedRoute = protectedRoutes.includes(path)
   const session = await getSession()
 
-  if(isProtectedRoute && !session?.task)
+  if(isProtectedRoute && !session?.token)
   return NextResponse.redirect(new URL('/login', request.nextUrl))
 
 

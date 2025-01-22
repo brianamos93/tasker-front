@@ -1,7 +1,5 @@
 import url from "./utils"
 
-let token = null
-
 export const setToken = newToken => {  
 	token = `Bearer ${newToken}`
 }
@@ -21,12 +19,12 @@ export const getTask = async (id) => {
 	return res.json()
 }
 
-export const createTask = async (task) => {
+export const createTask = async (task, token) => {
 	const res = await fetch(url + '/todos', {
 		method: "POST",
 		headers: {
-			Authorization: token,
-			"Content-Type": "application-json",
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
 
 		},
 		body: JSON.stringify({task})
@@ -34,12 +32,12 @@ export const createTask = async (task) => {
 	return res.json()
 }
 
-export const updateTask = async (id, task) => {
+export const updateTask = async (id, task, token) => {
 	const res = await fetch(`${url}/todos/${id}`,{
 		method: "PUT",
 		headers: {
-			Authorization: token,
-			"Content-Type": "application-json",
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
 
 		},
 		body: JSON.stringify({task})
@@ -47,12 +45,12 @@ export const updateTask = async (id, task) => {
 	return res.json()
 }
 
-export const deleteTask = async (id) => {
+export const deleteTask = async (id, token) => {
 	await fetch(`${url}/todos/${id}`, {
 		method: "DELETE",
 		headers: {
-			Authorization: token,
-			"Content-Type": "application-json",
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
 		}
 	})
 }
